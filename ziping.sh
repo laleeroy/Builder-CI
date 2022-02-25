@@ -6,14 +6,14 @@ msg() {
 
 function enviroment() {
    device=$(grep unch $CIRRUS_WORKING_DIR/build.sh -m 1 | cut -d ' ' -f 2 | cut -d _ -f 2 | cut -d - -f 1)
-   name_rom=PixelBlaster
-   JOS=$WORKDIR/rom/$name_rom/out/target/product/$device/$name_rom*.zip
+   name_rom=$(grep init $CIRRUS_WORKING_DIR/build.sh -m 1 | cut -d / -f 4)
+   JOS=$WORKDIR/rom/$name_rom/out/target/product/$device/PixelBlaster*.zip
 }
 
 function upload_rom() {
    msg Upload rom..
    curl -s -X POST https://api.telegram.org/bot$TG_TOKEN/sendMessage -d chat_id=$TG_CHAT_ID -d disable_web_page_preview=true -d parse_mode=html -d text="<b>Build status:</b>%0A@Bella_Aprilia_27 <code>Building Rom $name_rom succes [✔️]</code>"
-   rclone copy --drive-chunk-size 256M --stats 1s $JOS NFS:rom/$name_rom -P
+   rclone copy --drive-chunk-size 256M --stats 1s $JOS NFS:rom/PixelBlaster -P
    curl -s -X POST https://api.telegram.org/bot$TG_TOKEN/sendMessage -d chat_id=$TG_CHAT_ID -d disable_web_page_preview=true -d parse_mode=html -d text="Link : https://needforspeed.projek.workers.dev/rom/$name_rom/$(cd $WORKDIR/rom/$name_rom/out/target/product/$device && ls $name_rom*.zip)"
    msg Upload rom succes..
 }
@@ -33,13 +33,10 @@ function upload_ccache() {
 function upload() {
    enviroment
    if ! [ -a "$JOS" ]; then
-     curl -s -X POST https://api.telegram.org/bot$TG_TOKEN/sendMessage -d chat_id=$TG_CHAT_ID -d disable_web_page_preview=true -d parse_mode=html -d text="<b>Build status:</b>%0A@Bella_Aprilia_27 <code>Sorry Building Rom $name_rom Gagal [❌]</code>%0A %0A<b>Notes:</b>%0A<code>Karena system hanya mendeteksi Build ccache</code>"
-     msg Upload ccache only..
+     msg Upload ccache..
      upload_ccache
    fi
    upload_rom
-   msg Upload ccache..
-   upload_ccache
 }
 
 upload

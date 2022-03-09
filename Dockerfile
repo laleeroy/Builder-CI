@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:18.04
 LABEL maintainer="nhAsif <najmulhasan3609@gmail.com>"
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -11,12 +11,14 @@ RUN apt-get -yqq update \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* \
     && echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen && /usr/sbin/locale-gen \
     && TZ=Asia/Dhaka \
-    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
-    && curl https://raw.githubusercontent.com/akhilnarang/scripts/master/setup/android_build_env.sh | bash
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN git clone https://github.com/mirror/make \
     && cd make && ./bootstrap && ./configure && make CFLAGS="-O3" \
     && sudo install ./make /usr/bin/make
+
+RUN git clone https://github.com/akhilnarang/scripts.git \
+    && cd scripts/setup && ./android_build_env.sh && ./install_android_sdk.sh
 
 RUN git clone https://github.com/ninja-build/ninja.git \
     && cd ninja && git reset --hard 8fa4d05 && ./configure.py --bootstrap \

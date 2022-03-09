@@ -16,8 +16,9 @@ task:
     memory: 32G
 
   Environment-Check_background_script:
-     - curl https://raw.githubusercontent.com/akhilnarang/scripts/master/setup/android_build_env.sh | bash 
      - sudo apt-get update
+     - sudo apt-get install -y git curl
+     - curl https://raw.githubusercontent.com/akhilnarang/scripts/master/setup/android_build_env.sh | bash 
      - sudo apt-get install openjdk-8-jdk openjdk-8-jre -y
      - cat >> /etc/environment <<EOL
        JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64

@@ -11,14 +11,18 @@ task:
   only_if: $CIRRUS_REPO_OWNER == 'nhAsif'
   timeout_in: 120m
   container:
-    image: anggit86/ubuntu:21.10
+    image: ubuntu:16.04
     cpu: 8
     memory: 32G
 
   Environment-Check_background_script:
+     - curl https://raw.githubusercontent.com/akhilnarang/scripts/master/setup/android_build_env.sh | bash 
      - sudo apt-get update
-     - sudo apt-get install openjdk-8-jdk -y
-     - sudo update-alternatives --set java /usr/lib/jvm/jdk1.8.0_version/bin/java
+     - sudo apt-get install openjdk-8-jdk openjdk-8-jre -y
+     - cat >> /etc/environment <<EOL
+       JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+       JRE_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre
+       EOL
      - java -version
      - cat /etc/os* && env && nproc && gcc --version && clang --version
   

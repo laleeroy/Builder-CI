@@ -2,13 +2,13 @@ env:
   #rcloneconfig: "ENCRYPTED[1751d3bf4e51c583b3523d298896d6f6a18059c61e899a75919426aca07cc28295b1a46f2defe6d77200458a9ab1eea5]"
   TG_TOKEN: "ENCRYPTED[!f10a5ac8f8557d0fff6accd00a843e4389b7baa5afb40484244524f56956fbc16fa88a051b340f01c5398c9c0e041bf9!]"
   TG_CHAT_ID: "ENCRYPTED[!d133d0099e8e0340cfe4860c9f5fb2eeedf4c303bb9b27ca24bc3f6098a71fbc7f4db3a3236a99f1ad81f0ac213067d5!]"
-  WORKDIR: "ENCRYPTED[2b617f6a9acdcaf90de5ff3725ffd4c40755b0efb8cc29aac7017308bfd5f4377385e43c327d59cc9fc32f46d16bc854]"
+  WORKDIR: "/tmp/cirrus-ci-build"
   EMAIL: "ENCRYPTED[!ae9f3318cf0b47bf3df1a77575566a9d50bec3eaf1a4ca2e9bad4a5ccdcd1736e4cdecd93819aa6f6b3db1362c2ee5e3!]"
   CIRRUS_CLONE_DEPTH: "1"
 
 task:
   name: "Setting Up, Syncing, Building and Uploading"
-  only_if: $CIRRUS_REPO_OWNER == 'NFS86'
+  only_if: $CIRRUS_REPO_OWNER == 'laleeroy'
   timeout_in: 120m
   container:
     image: anggit86/ubuntu:21.10
